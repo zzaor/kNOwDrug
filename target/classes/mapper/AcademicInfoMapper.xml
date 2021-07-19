@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.knowDrug.academicInfo.mapper.AcademicInfoMapper">
+    <resultMap id="academicInfo" type="kr.or.knowDrug.academicInfo.vo.AcademicInfoVO">
+        <result property="academicSeq" column="academic_seq"/>
+        <result property="memId" column="mem_id"/>
+        <result property="academicTitle" column="academic_title"/>
+        <result property="attachFile" column="attach_file"/>
+        <result property="attachPath" column="attach_path"/>
+        <result property="academicHit" column="academic_hit"/>
+        <result property="inDate" column="in_date"/>
+        <result property="inUserId" column="in_user_id"/>
+        <result property="upDate" column="up_date"/>
+        <result property="upUserId" column="up_user_id"/>
+    </resultMap>
+
+	<select id="selectInfoList"  resultType="egovMap">
+
+	    SELECT
+	    		S.RNUM, S.ACADEMIC_SEQ , S.MEM_ID, S.ACADEMIC_TITLE, S.ACADEMIC_HIT, S.IN_DATE, S.IN_USER_ID, S.UP_DATE, S.UP_USER_ID
+	      FROM  (
+
+			    SELECT ROWNUM RNUM, T.*
+			      FROM (
+					    SELECT
+								ACADEMIC_SEQ,
+								MEM_ID,
+								ACADEMIC_TITLE,
+								ACADEMIC_HIT,
+								IN_DATE,
+								IN_USER_ID,
+								UP_DATE,
+								UP_USER_ID
+						FROM
+								ACADEMIC_INFO
+						WHERE 	1 = 1
+						<if test="selOpt != null and selOpt != ''">
+						    <choose>
+						        <when test="selOpt.equals('title')">
+						            AND ACADEMIC_TITLE LIKE '%' || #{keyword} || '%'
+						        </when>
+						        <when test="selOpt.equals('inDate')">
+						            AND IN_DATE LIKE '%' || #{keyword} || '%'
+						        </when>
+						    </choose>
+						</if>
+						ORDER BY ACADEMIC_SEQ DESC
+			      ) T
+	     	 ) S
+	     	 WHERE S.RNUM BETWEEN TO_NUMBER(#{pageNum})*9-8 AND TO_NUMBER(#{pageNum})*9
+	</select>
+
+
+	<insert id="writeInfo" parameterType="hashMap">
+	    <selectKey order="BEFORE" keyProperty="academicSeq" resultType="int">
+	        SELECT NVL(MAX(ACADEMIC_SEQ),0)+1 FROM ACADEMIC_INFO
+	    </selectKey>
+
+	    INSERT INTO ACADEMIC_INFO
+	    	(
+	    		ACADEMIC_SEQ,
+				MEM_ID,
+				ACADEMIC_TITLE,
+				ACADEMIC_HIT,
+				IN_DATE,
+				IN_USER_ID,
+				UP_DATE,
+				UP_USER_ID
+			)
+		VALUES
+			(
+				#{academicSeq},
+				'admin',
+				#{academicTitle},
+				'0',
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				'admin',
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				'admin'
+			)
+	</insert>
+
+
+	<insert id="writeFile" parameterType="hashMap">
+	    <selectKey order="BEFORE" keyProperty="fileSeq" resultType="int">
+	        SELECT NVL(MAX(FILE_SEQ),0)+1 FROM ACADEMIC_FILE
+	    </selectKey>
+
+
+	    INSERT INTO ACADEMIC_FILE
+	    	(
+				FILE_SEQ,
+				ACADEMIC_SEQ,
+				ATTACH_FILE,
+				ATTACH_PATH,
+				IN_DATE,
+				IN_USER_ID,
+				UP_DATE,
+				UP_USER_ID
+
+			)
+		VALUES
+			(
+				#{fileSeq},
+				#{academicSeq},
+				#{attachFile},
+				#{attachPath},
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				'admin',
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				'admin'
+			)
+	</insert>
+
+	<select id="selectSeq" resultType="String">
+	    SELECT
+	    		MAX(ACADEMIC_SEQ)
+          FROM
+          		ACADEMIC_INFO
+	</select>
+
+	<select id="selectFile" resultType="int" parameterType="hashMap">
+	    SELECT
+	    		COUNT(*)
+          FROM
+          		ACADEMIC_FILE
+         WHERE
+         		ACADEMIC_SEQ = #{academicSeq}
+	</select>
+
+
+	<select id="selectInfo" parameterType="hashMap" resultType="egovMap">
+		SELECT
+					A.ACADEMIC_TITLE,
+	                A.ACADEMIC_HIT,
+	                B.FILE_SEQ,
+	                B.ATTACH_FILE,
+	                B.ATTACH_PATH,
+	                A.IN_DATE,
+	                A.IN_USER_ID,
+                	A.UP_DATE,
+                	A.UP_USER_ID
+          FROM
+          			ACADEMIC_INFO A
+   		 INNER JOIN
+   		 			ACADEMIC_FILE B ON (A.ACADEMIC_SEQ = B.ACADEMIC_SEQ)
+   		 WHERE
+   		 		B.ACADEMIC_SEQ = #{academicSeq}
+   		 ORDER BY B.FILE_SEQ
+	</select>
+
+
+	<update id="addHit" parameterType="hashMap">
+	   UPDATE
+	   			ACADEMIC_INFO
+   		  SET
+   		  		ACADEMIC_HIT = TO_NUMBER(ACADEMIC_HIT)+1
+   		WHERE
+   				ACADEMIC_SEQ = #{academicSeq}
+	</update>
+
+
+	<delete id="deleteInfo" parameterType="hashMap">
+    	DELETE FROM ACADEMIC_INFO
+    	WHERE ACADEMIC_SEQ = #{academicSeq}
+	</delete>
+
+	<select id="selectCount" resultType="int">
+	    SELECT
+	    		COUNT(*) cnt
+	      FROM
+	      		ACADEMIC_INFO
+	</select>
+
+
+	<update id="modiInfo" parameterType="hashMap">
+    	UPDATE
+    			ACADEMIC_INFO
+    	   SET
+    	   		ACADEMIC_TITLE = #{academicTitle},
+    	   		UP_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+    	   		UP_USER_ID = 'admin'
+    	  WHERE
+    	  		ACADEMIC_SEQ = 	#{academicSeq}
+	</update>
+
+	<update id="deleteFile" parameterType="hashMap">
+	    DELETE FROM ACADEMIC_FILE
+		 WHERE
+		 		ACADEMIC_SEQ = #{academicSeq}
+		   AND
+		   		FILE_SEQ = #{fileSeq}
+	</update>
+
+
+
+
+</mapper>

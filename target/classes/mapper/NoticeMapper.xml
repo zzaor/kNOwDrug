@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.knowDrug.notice.mapper.NoticeMapper">
+	<resultMap id="notice" type="kr.or.knowDrug.notice.vo.NoticeVO">
+		<result property="notiSeq" column="noti_seq" />
+		<result property="memId" column="mem_id" />
+		<result property="notiTitle" column="noti_title" />
+		<result property="notiContent" column="noti_content" />
+		<result property="attachFile" column="attach_file" />
+		<result property="attachPath" column="attach_path" />
+		<result property="notiHit" column="noti_hit" />
+		<result property="inDate" column="in_date" />
+		<result property="inUserId" column="in_user_id" />
+		<result property="upDate" column="up_date" />
+		<result property="upUserId" column="up_user_id" />
+	</resultMap>
+
+	<select id="selectNoticeList" resultType="egovMap">
+		  SELECT
+	    	s.rnum,
+			s.NOTI_SEQ,
+			s.MEM_ID,
+		    s.NOTI_TITLE,
+		    s.NOTI_CONTENT,
+		    s.ATTACH_FILE,
+		    s.ATTACH_PATH,
+		    s.NOTI_HIT,
+		    s.IN_DATE,
+		    s.IN_USER_ID,
+		    s.UP_DATE,
+		    s.UP_USER_ID
+	      FROM  (
+			    SELECT ROWNUM RNUM, T.*
+			      FROM (
+					    SELECT
+								NOTI_SEQ,
+								MEM_ID,
+								NOTI_TITLE,
+								NOTI_CONTENT,
+								ATTACH_FILE,
+                                ATTACH_PATH,
+                                NOTI_HIT,
+								IN_DATE,
+								IN_USER_ID,
+								UP_DATE,
+								UP_USER_ID
+						FROM
+								NOTICE
+						WHERE 	1 = 1
+						<if test="selOpt != null and selOpt != ''">
+						    <choose>
+						        <when test="selOpt.equals('title')">
+						            AND NOTI_TITLE LIKE '%' || #{keyword} || '%'
+						        </when>
+						        <when test="selOpt.equals('inDate')">
+						            AND IN_DATE LIKE '%' || #{keyword} || '%'
+						        </when>
+						    </choose>
+						</if>
+						ORDER BY NOTI_SEQ DESC
+			      ) T
+	     	 ) S
+	     	 WHERE S.RNUM BETWEEN TO_NUMBER(#{pageNum})*10-9 AND TO_NUMBER(#{pageNum})*10
+	</select>
+
+	<select id="selectCount" resultType="int">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			NOTICE
+	</select>
+
+
+	<insert id="writeNotice" parameterType="hashMap">
+	    <selectKey order="BEFORE" keyProperty="notiSeq" resultType="int">
+	        SELECT NVL(MAX(NOTI_SEQ),0)+1 FROM NOTICE
+	    </selectKey>
+
+	    	INSERT INTO NOTICE
+	    		(
+	    			NOTI_SEQ,
+					MEM_ID,
+					NOTI_TITLE,
+					NOTI_CONTENT,
+					ATTACH_FILE,
+                    ATTACH_PATH,
+                    NOTI_HIT,
+					IN_DATE,
+					IN_USER_ID,
+					UP_DATE,
+					UP_USER_ID
+	    		)
+	    	VALUES
+	    		(
+	    			#{notiSeq},
+					#{memId},
+					#{notiTitle},
+					#{notiContent},
+					#{attachFile},
+                    #{attachPath},
+                    '0',
+					TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
+					#{memId},
+					TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
+					#{memId}
+	    		)
+	</insert>
+
+
+	<select id="noticeDetail" parameterType="hashMap" resultMap="notice">
+		SELECT
+				NOTI_SEQ,
+				MEM_ID,
+				NOTI_TITLE,
+				NOTI_CONTENT,
+				ATTACH_FILE,
+                ATTACH_PATH,
+                NOTI_HIT,
+				IN_DATE,
+				IN_USER_ID,
+				UP_DATE,
+				UP_USER_ID
+		 FROM
+		 		NOTICE
+		 WHERE
+		 		NOTI_SEQ = #{notiSeq}
+	</select>
+
+	<update id="hit">
+	    UPDATE
+	    		NOTICE
+	       SET
+	       		NOTI_HIT = TO_NUMBER(NOTI_HIT) + 1
+	     WHERE
+	     		NOTI_SEQ = #{notiSeq}
+	</update>
+
+	<update id="fileDel" parameterType="hashMap">
+		UPDATE
+        		NOTICE
+        SET
+	            ATTACH_FILE ='',
+	            ATTACH_PATH ='',
+	            UP_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        WHERE
+            	NOTI_SEQ =#{notiSeq}
+	</update>
+
+	<update id="noticeModify" parameterType="hashMap">
+		UPDATE
+	        	NOTICE
+        SET
+	        	NOTI_TITLE = #{notiTitle},
+	        	NOTI_CONTENT = #{notiContent},
+	        	ATTACH_FILE =#{attachFile},
+	        	UP_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        WHERE
+	        	NOTI_SEQ =#{notiSeq}
+	</update>
+
+	<delete id="noticeDelete">
+		DELETE	FROM NOTICE
+		WHERE	NOTI_SEQ = #{notiSeq}
+
+	</delete>
+
+</mapper>
+

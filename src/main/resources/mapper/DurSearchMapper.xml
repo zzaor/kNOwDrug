@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.knowDrug.durSearch.mapper.DurSearchMapper">
+
+
+    <insert id="insertData" parameterType="hashMap">
+        <selectKey order="BEFORE" keyProperty="searchSeq" resultType="int">
+            SELECT NVL(MAX(SEARCH_SEQ), 0)+1 FROM DUR_SEARCH
+        </selectKey>
+     <![CDATA[
+        INSERT INTO DUR_SEARCH
+        	(	SEARCH_SEQ,
+				MEM_ID,
+				ITEM_NAME,
+				INGREDIENT_NAME,
+				ENTP_NAME,
+				EFFICACY,
+				ROUTE,
+				FORM_NAME,
+				RECOGNIZE_NAME,
+				DUR_SHAPE,
+				DUR_COLOR,
+				DUR_LINE,
+				DUR_CLASSIFY,
+				IN_USER_ID,
+				IN_DATE,
+				UP_USER_ID,
+				UP_DATE			)
+		VALUES
+		 	(	#{searchSeq},
+			 	#{memId},
+			 	#{itemName},
+				#{ingreName},
+				#{entpName},
+				#{efficacy},
+
+				( SELECT   UNI_CODE_DETAIL
+				    FROM   UNI_UNI_CODE_DETAIL
+				   WHERE   UNI_CODE_DETAIL_NAME = #{route}
+				     AND   UNI_CODE = 'KDA'),
+
+				( SELECT   UNI_CODE_DETAIL
+				    FROM   UNI_UNI_CODE_DETAIL
+				   WHERE   UNI_CODE_DETAIL_NAME = #{formName}
+				     AND   UNI_CODE = 'KDB'),
+
+				#{recognizeName},
+
+				( SELECT   UNI_CODE_DETAIL
+				    FROM   UNI_UNI_CODE_DETAIL
+				   WHERE   UNI_CODE_DETAIL_NAME = #{durShape}
+				     AND   UNI_CODE = 'KDC'),
+
+				( SELECT   UNI_CODE_DETAIL
+				    FROM   UNI_UNI_CODE_DETAIL
+				   WHERE   UNI_CODE_DETAIL_NAME = #{durColor}
+				     AND   UNI_CODE = 'KDD'),
+
+				( SELECT   UNI_CODE_DETAIL
+				    FROM   UNI_UNI_CODE_DETAIL
+				   WHERE   UNI_CODE_DETAIL_CONT = #{durLine}
+				     AND   UNI_CODE = 'KDE'),
+
+				( SELECT   UNI_CODE_DETAIL
+				    FROM   UNI_UNI_CODE_DETAIL
+				   WHERE   UNI_CODE_DETAIL_NAME = #{durClassify}
+				     AND   UNI_CODE = 'KDF'),
+
+				#{memId},
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				#{memId},
+				TO_CHAR(SYSDATE,'YYYY-MM-DD')		)
+
+		]]>
+    </insert>
+
+</mapper>

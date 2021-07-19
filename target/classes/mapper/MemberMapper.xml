@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.knowDrug.member.mapper.MemberMapper">
+    <resultMap id="member" type="kr.or.knowDrug.member.vo.MemberVO">
+        <result property="memId" column="mem_id"/>
+        <result property="memPwd" column="mem_pwd"/>
+        <result property="memName" column="mem_name"/>
+        <result property="memBirth" column="mem_birth"/>
+        <result property="memTel" column="mem_tel"/>
+        <result property="memZip" column="mem_zip"/>
+        <result property="memAddr1" column="mem_addr1"/>
+        <result property="memAddr2" column="mem_addr2"/>
+        <result property="inDate" column="in_date"/>
+        <result property="activeYn" column="active_yn"/>
+    </resultMap>
+
+	<select id="selectMember" parameterType="hashMap" resultMap="member">
+	SELECT
+			MEM_ID,
+			MEM_PWD,
+			MEM_NAME,
+			MEM_BIRTH,
+			MEM_TEL,
+			MEM_ZIP,
+			MEM_ADDR1,
+			MEM_ADDR2,
+			IN_DATE,
+			ACTIVE_YN
+	  FROM
+	  		DRUG_MEMBER
+	  WHERE
+	  		MEM_ID = #{memId}
+	    ANd
+	    	MEM_PWD =#{memPwd}
+	</select>
+
+
+	<select id="mypage" parameterType="hashMap" resultMap="member">
+	SELECT
+			MEM_ID,
+			MEM_PWD,
+			MEM_NAME,
+			MEM_BIRTH,
+			MEM_TEL,
+			MEM_ZIP,
+			MEM_ADDR1,
+			MEM_ADDR2,
+			IN_DATE,
+			ACTIVE_YN
+	  FROM
+	  		DRUG_MEMBER
+	  WHERE
+	  		MEM_ID = #{memId}
+	</select>
+
+
+
+
+
+   	<select id="idDuplCheck" parameterType="hashMap" resultType="int">
+	SELECT
+			COUNT(*)
+	  FROM
+	  		DRUG_MEMBER
+	  WHERE
+	  		MEM_ID = #{memId}
+	</select>
+
+	<insert id="join" parameterType="hashMap">
+		INSERT INTO DRUG_MEMBER
+			(
+				MEM_ID,
+				MEM_PWD,
+				MEM_NAME,
+				MEM_BIRTH,
+				MEM_TEL,
+				MEM_ZIP,
+				MEM_ADDR1,
+				MEM_ADDR2,
+				IN_DATE,
+				ACTIVE_YN	)
+		VALUES
+			(
+				#{memId},
+				#{memPwd},
+				#{memName},
+				#{memBirth},
+				#{memTel},
+				#{memZip},
+				#{memAddr1},
+				#{memAddr2},
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				'Y'			)
+	</insert>
+
+	<select id="selectMemberList" resultType="egovMap">
+	    SELECT
+            s.rnum,
+			s.MEM_ID,
+			s.MEM_PWD,
+			s.MEM_NAME,
+			s.MEM_BIRTH,
+			s.MEM_TEL,
+			s.MEM_ZIP,
+			s.MEM_ADDR1,
+			s.MEM_ADDR2,
+			s.IN_DATE,
+			s.ACTIVE_YN
+	      FROM  (
+			    SELECT ROWNUM RNUM, T.*
+			      FROM (
+					    SELECT
+                            MEM_ID,
+                            MEM_PWD,
+                            MEM_NAME,
+                            MEM_BIRTH,
+                            MEM_TEL,
+                            MEM_ZIP,
+                            MEM_ADDR1,
+                            MEM_ADDR2,
+                            IN_DATE,
+                            ACTIVE_YN
+						FROM
+                            DRUG_MEMBER
+			      ) T
+	     	 ) S
+
+		WHERE
+			S.RNUM BETWEEN TO_NUMBER(#{pageNum})*10-9 AND TO_NUMBER(#{pageNum})*10
+		AND NOT S.MEM_ID IN ('admin')
+	</select>
+
+	<update id="modiMypage" parameterType="hashMap">
+	    UPDATE	DRUG_MEMBER
+		   SET	MEM_NAME = #{memName},
+		   		MEM_BIRTH = #{memBirth},
+		   		MEM_TEL = #{memTel},
+		   		MEM_ZIP = #{memZip},
+		   		MEM_ADDR1 = #{memAddr1},
+		   		MEM_ADDR2 = #{memAddr2},
+		   		IN_DATE = SYSDATE
+		 WHERE MEM_ID = #{memId}
+	</update>
+
+
+	<update id="changeActive" parameterType="hashMap">
+		UPDATE	DRUG_MEMBER
+		   SET	ACTIVE_YN = 'N'
+	 	 WHERE	MEM_ID = #{memId}
+	 	   AND  MEM_PWD = #{memPwd}
+	</update>
+
+	<update id="changeActiveY" parameterType="hashMap">
+		UPDATE	DRUG_MEMBER
+		   SET	ACTIVE_YN = 'Y'
+	 	WHERE MEM_ID = #{memId}
+	</update>
+	
+	<update id="changeActiveD" parameterType="hashMap">
+		UPDATE	DRUG_MEMBER
+		   SET	ACTIVE_YN = 'D'
+	 	WHERE MEM_ID = #{memId}
+	</update>
+
+	<select id="selectCount" resultType="int">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			DRUG_MEMBER
+	</select>
+
+	<select id="duplId" parameterType="hashMap" resultMap="member">
+	    SELECT
+	    	MEM_ID,
+	    	MEM_PWD
+	    FROM
+	    	DRUG_MEMBER
+	    WHERE MEM_ID =#{memId}
+
+	</select>
+
+	<update id="setPwd" parameterType="hashMap">
+	    UPDATE
+	    	DRUG_MEMBER
+	    SET
+	    	MEM_PWD =#{tempPwd}
+	    WHERE
+	    	MEM_ID =#{memId}
+	</update>
+
+	<update id="changePwd">
+	    UPDATE
+	    	DRUG_MEMBER
+	    SET
+	    	MEM_PWD =#{newPwd}
+	    WHERE
+	    	MEM_ID =#{memId}
+
+	</update>
+
+
+
+
+</mapper>

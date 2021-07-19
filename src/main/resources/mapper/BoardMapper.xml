@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.knowDrug.board.mapper.BoardMapper">
+    <resultMap id="board" type="kr.or.knowDrug.board.vo.BoardVO">
+        <result property="boardSeq" column="board_seq"/>
+        <result property="memId" column="mem_id"/>
+        <result property="memName" column="mem_name"/>
+        <result property="boardTitle" column="board_title"/>
+        <result property="boardContent" column="board_content"/>
+        <result property="attachFile" column="attach_file"/>
+        <result property="attachPath" column="attach_path"/>
+        <result property="boardHit" column="board_hit"/>
+        <result property="inDate" column="in_date"/>
+        <result property="inUserId" column="in_user_id"/>
+        <result property="upDate" column="up_date"/>
+        <result property="upUserId" column="up_user_id"/>
+    </resultMap>
+
+    <resultMap id="reply" type="kr.or.knowDrug.board.vo.ReplyVO">
+        <result property="replySeq" column="reply_seq"/>
+        <result property="boardSeq" column="board_seq"/>
+        <result property="replyName" column="reply_name"/>
+        <result property="replyPwd" column="reply_pwd"/>
+        <result property="replyContent" column="reply_content"/>
+        <result property="inDate" column="in_date"/>
+        <result property="inUserId" column="in_user_id"/>
+        <result property="upDate" column="up_date"/>
+        <result property="upUserId" column="up_user_id"/>
+    </resultMap>
+
+	<select id="selectBoardList" resultType="egovMap">
+	    SELECT
+	    	s.rnum,
+			s.BOARD_SEQ,
+			s.MEM_ID,
+		    s.BOARD_TITLE,
+		    s.ATTACH_FILE,
+		    s.ATTACH_PATH,
+		    s.BOARD_HIT,
+		    s.IN_DATE,
+		    s.IN_USER_ID,
+		    s.UP_DATE,
+		    s.UP_USER_ID
+	      FROM  (
+			    SELECT ROWNUM RNUM, T.*
+			      FROM (
+					    SELECT
+								board_seq,
+								MEM_ID,
+								board_TITLE,
+								attach_file,
+                                attach_path,
+                                board_hit,
+								IN_DATE,
+								IN_USER_ID,
+								UP_DATE,
+								UP_USER_ID
+						FROM
+								board
+						WHERE 	1 = 1
+						<if test="selOpt != null and selOpt != ''">
+						    <choose>
+						        <when test="selOpt.equals('title')">
+						            AND BOARD_TITLE LIKE '%' || #{keyword} || '%'
+						        </when>
+						        <when test="selOpt.equals('inDate')">
+						            AND IN_DATE LIKE '%' || #{keyword} || '%'
+						        </when>
+						    </choose>
+						</if>
+						ORDER BY BOARD_SEQ DESC
+			      ) T
+	     	 ) S
+	     	 WHERE S.RNUM BETWEEN TO_NUMBER(#{pageNum})*10-9 AND TO_NUMBER(#{pageNum})*10
+
+	</select>
+
+	<insert id="write" parameterType="hashMap">
+	<selectKey order="BEFORE" keyProperty="boardSeq" resultType="int">
+		(SELECT NVL(MAX(BOARD_SEQ),0)+1 FROM BOARD)
+	</selectKey>
+		INSERT INTO BOARD
+			(
+				BOARD_SEQ,
+				MEM_ID,
+				BOARD_TITLE,
+				BOARD_CONTENT,
+				ATTACH_FILE,
+				ATTACH_PATH,
+				BOARD_HIT,
+				IN_DATE,
+				IN_USER_ID,
+				UP_DATE,
+				UP_USER_ID
+			)
+
+		VALUES
+			(	#{boardSeq},
+				#{memId},
+				#{boardTitle},
+				#{boardContent},
+				#{attachFile},
+				#{attachPath},
+				'0',
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				#{memId},
+				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+				#{memId}	)
+	</insert>
+
+	<select id="read"  parameterType="hashMap" resultMap="board">
+		SELECT
+			B.BOARD_SEQ,
+			A.MEM_ID,
+			A.MEM_NAME,
+		    B.BOARD_TITLE,
+		    B.BOARD_CONTENT,
+		    B.ATTACH_FILE,
+		    B.ATTACH_PATH,
+		    B.BOARD_HIT,
+		    B.IN_DATE,
+		    B.IN_USER_ID,
+		    B.UP_DATE,
+		    B.UP_USER_ID
+		FROM
+			DRUG_MEMBER A, BOARD B
+		WHERE
+			A.MEM_ID = B.MEM_ID
+		AND
+			B.BOARD_SEQ = #{boardSeq}
+	</select>
+
+	<delete id="delete" parameterType="hashMap">
+	 	DELETE FROM BOARD
+		WHERE BOARD_SEQ = #{boardSeq}
+
+	</delete>
+
+	<update id="boardModify" parameterType="hashMap">
+        UPDATE
+        	BOARD
+        SET
+        	BOARD_TITLE = #{boardTitle},
+        	BOARD_CONTENT = #{boardContent},
+        	ATTACH_FILE =#{attachFile},
+        	UP_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        WHERE
+        	BOARD_SEQ =#{boardSeq}
+	</update>
+
+	<insert id="replyWrite" parameterType="hashMap">
+	<selectKey order="BEFORE" keyProperty="replySeq" resultType="int">
+		(SELECT NVL(MAX(REPLY_SEQ),0)+1 FROM board_reply)
+	</selectKey>
+	INSERT INTO BOARD_REPLY
+		(
+			REPLY_SEQ,
+			BOARD_SEQ,
+			REPLY_NAME,
+			REPLY_PWD,
+			REPLY_CONTENT,
+			IN_DATE,
+			IN_USER_ID,
+			UP_DATE,
+			UP_USER_ID
+		)
+	VALUES
+		(
+			#{replySeq},
+			#{boardSeq},
+			#{replyName},
+			#{replyPwd},
+			#{content},
+			TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+			#{replyName},
+			TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+			#{replyName}
+		)
+
+	</insert>
+
+	<select id="replyList" parameterType="hashMap" resultMap="reply">
+		SELECT
+			REPLY_SEQ,
+			BOARD_SEQ,
+			REPLY_NAME,
+			REPLY_PWD,
+			REPLY_CONTENT,
+			IN_DATE,
+			IN_USER_ID,
+			UP_DATE,
+			UP_USER_ID
+		FROM
+			BOARD_REPLY
+		WHERE
+			BOARD_SEQ = #{boardSeq}
+	</select>
+
+	<delete id="replyDel" parameterType="hashMap">
+		delete from board_reply
+		where board_seq =#{boardSeq}
+		and reply_seq =#{replySeq}
+	</delete>
+
+	<update id="fileDel" parameterType="hashMap">
+		UPDATE
+        	BOARD
+        SET
+            ATTACH_FILE ='',
+            ATTACH_PATH ='',
+            UP_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        WHERE
+            BOARD_SEQ =#{boardSeq}
+	</update>
+
+	<select id="selectCount" resultType="int">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			BOARD
+	</select>
+
+	<update id="hit">
+	    UPDATE
+	    	BOARD
+	    SET
+	    	BOARD_HIT = TO_NUMBER(BOARD_HIT)+ 1
+	    WHERE BOARD_SEQ = #{boardSeq}
+
+
+	</update>
+
+</mapper>
