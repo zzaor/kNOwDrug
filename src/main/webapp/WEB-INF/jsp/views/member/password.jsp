@@ -106,7 +106,7 @@ function fn_sendmail(){
 			                        	<label style="margin-top: 10px;">이메일</label>
 			                        </div>
 			                        <div class="col-sm-8" >
-		                            	<input type="text" class="search-input" id="memId" name="memId" placeholder="piano10219@nate.com" required>
+		                            	<input type="text" class="search-input" id="memId" name="memId" placeholder="abc123@knowdrug.co.kr" required>
 		                        	</div>
 		                        </div>
 								<div class="form-group row" style="margin-top: 7%;">
