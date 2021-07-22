@@ -24,7 +24,22 @@
 }
 
 
+.predict-btn{
+	width : 25%;
+	height : 37px;
+	padding : 0px 20px;
+	border : 1px solid #2eca6a;
+	background: #fff;
+	color : #2eca6a;
+	transition : 0.3s;
+	border-radius: 50px;
+	margin: 2% 1%;
+}
 
+.predict-btn:hover{
+	background: #2eca6a;
+	color : #fff;
+}
 body {
   font-family: 'SEBANG_Gothic_Regular', Poppins;
   color: #555555;

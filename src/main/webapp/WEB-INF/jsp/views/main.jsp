@@ -3,27 +3,6 @@
 <%@ taglib prefix ="c" uri ="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
- <link rel="shortcut icon" type="image/x-icon" href="/resources/assets/img/favicon.ico">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/main.css" rel="stylesheet">
 
@@ -180,7 +159,7 @@
               <div class="icon">
               	<img src="/resources/assets/img/main/main_admin02.png" style="width: 80%;"/>
               </div>
-              <h4><a href="/notice.do">공지사항 관리</a></h4>
+              <h4><a href="/graph.do">검색어 관리</a></h4>
               <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
             </div>
           </div>

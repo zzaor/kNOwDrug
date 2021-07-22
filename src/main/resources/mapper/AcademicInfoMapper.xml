@@ -15,7 +15,7 @@
         <result property="upUserId" column="up_user_id"/>
     </resultMap>
 
-	<select id="selectInfoList"  resultType="egovMap">
+	<select id="selectInfoList" resultType="egovMap">
 
 	    SELECT
 	    		S.RNUM, S.ACADEMIC_SEQ , S.MEM_ID, S.ACADEMIC_TITLE, S.ACADEMIC_HIT, S.IN_DATE, S.IN_USER_ID, S.UP_DATE, S.UP_USER_ID
@@ -172,7 +172,6 @@
 	      FROM
 	      		ACADEMIC_INFO
 	</select>
-
 
 	<update id="modiInfo" parameterType="hashMap">
     	UPDATE

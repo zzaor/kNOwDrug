@@ -98,11 +98,12 @@ public class BoardController {
                log.error(e.getMessage());
             }//end catch
          }//end for
+
       String memId = (String) session.getAttribute("memId");
       map.put("memId", memId);
-      
+
       this.service.getBoardWrite(map);
-      
+
       return  "redirect:/board.do";
    }
 

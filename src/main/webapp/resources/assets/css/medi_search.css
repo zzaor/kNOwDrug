@@ -145,7 +145,7 @@ td {
 }
 
 .mark_medi, .form, .size, .name, .comp, .categ, .info_print {
-	text-align: center;
+/* 	text-align: center; */
 	font-size: 15px;
 }
 /* 검색결과 */

@@ -75,6 +75,7 @@ public class AcademicInfoController {
 	}
 
 
+
 	/**
 	 * 학술정보 등록 창 열기
 	 * @author 길정우
@@ -173,7 +174,7 @@ public class AcademicInfoController {
 			log.info("-------------------");
 			log.info("Upload File Name : " + multipartFile.getOriginalFilename());
 			log.info("Upload File Size : " + multipartFile.getSize());
-			
+
 			saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
 			if(saveFile != null) {
 				fileMap.put("attachFile", multipartFile.getOriginalFilename());

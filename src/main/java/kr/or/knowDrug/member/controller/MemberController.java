@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.or.knowDrug.academicInfo.service.AcademicInfoService;
+import kr.or.knowDrug.academicInfo.vo.AcademicInfoVO;
 import kr.or.knowDrug.member.service.MemberPage;
 import kr.or.knowDrug.member.service.MemberService;
 import kr.or.knowDrug.member.vo.MemberVO;
@@ -154,7 +156,8 @@ public class MemberController {
 	*/
 	@RequestMapping(value="/logout.do")
 	public String logout(HttpSession session) {
-		session.removeAttribute("member");
+//		session.removeAttribute("member");
+		session.invalidate();
 		return "redirect:/main.do";
 	}
 

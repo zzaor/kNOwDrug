@@ -7,27 +7,6 @@
 %>
 <c:set var="memId" value="<%=memId%>" />
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/ingredients_info.css?after" rel="stylesheet">
 
@@ -40,10 +19,10 @@
 		})
 		checkbox.checked = true;
 	}
-	
+
 	function fn_reset(){
 		$('#ingreName').val('');
-	
+
 		$('input:checkbox[class="checkBox"]:checked').prop("checked",false);
 
 
@@ -55,7 +34,7 @@
 			alert("성분명을 입력해주세요")
 			return false;
 		}
-		
+
 		var checkBoxlen = $("input:checkbox[name=disease]:checked").length
 		if(checkBoxlen == 0){
 			alert("약효분류를 하나 선택해주세요")
@@ -76,6 +55,7 @@
 	        data: param,
 	        error: function () {
 	            alert('검색 결과가 없습니다.');
+	            fn_reset();
 	        },
 	        success: function (data) {
 	        	fn_reset();
@@ -127,13 +107,12 @@
     <section class="property-grid grid">
       <div class="container">
       	<div class="row">
-        	<div class="" style="padding-left: 8%; background:#e9f9e7; width: 70%;">
-            	<span style="font-size:15px;color:#008073;">
-            	입력한 성분명의 상세정보와 금기내용을 조회할 수 있습니다.<br></span>
+        	<div style="margin-left: 5%;background: #e9f9e7;width: 390px;text-align: center;">
+            	<span style="font-size:15px;color:#008073;">입력한 성분명의 상세정보와 금기내용을 조회할 수 있습니다.<br></span>
         	</div>
       	</div>
         <div class="row mg-tb3">
-        
+
         	<div class="col-2 txt-cnt"><span style="color: red">*</span>&nbsp;성분명(한글)</div>
         	<div class="col" style="margin-left: 4%;">
         		<input type="text" class="search-input" id="ingreName" />
@@ -224,9 +203,9 @@
 			</div>
 		</div>
 	    <div class="row">
-	    	<div class="col" style="padding-left: 8%; background:#e9f9e7;">
-	        	<span style="font-size:15px;color:#008073;">필수입력값을 제외한 데이터는 홈페이지에서 더 나은 서비스를 제공하기 위해 수집하는 데이터입니다. 협조 부탁드립니다.</span>
-	    	</div>
+	    	<div style="margin-left: 5%;background: #e9f9e7;width: 763px;text-align: center;">
+				<span style="font-size:15px;color:#008073;">필수입력값을 제외한 데이터는 홈페이지에서 더 나은 서비스를 제공하기 위해 수집하는 데이터입니다. 협조 부탁드립니다.</span>
+			</div>
 	    </div>
 		<div class="row txt-cnt">
 			<div class="col">

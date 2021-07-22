@@ -7,316 +7,279 @@
 %>
 	<c:set var="memId" value="<%=memId%>" />
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/drug_identify.css" rel="stylesheet">
 
 <script type="text/javascript">
-function fn_Search() {
-    var itemName = $("#itemName").val();
-    if(itemName == null || itemName == ""){
-    	itemName = "";
-    }
+	function fn_Search() {
+	    var itemName = $("#itemName").val();
+	    if(itemName == null || itemName == ""){
+	    	itemName = "";
+	    }
 
-    var entpName = $("#entpName").val();
-    if(entpName == null || entpName == ""){
-    	entpName = "";
-    }
+	    var entpName = $("#entpName").val();
+	    if(entpName == null || entpName == ""){
+	    	entpName = "";
+	    }
 
-    if(itemName == null && entpName == null || itemName == "" && entpName == ""){
-    	alert("제품명 또는 회사명을 입력해주세요.")
-    	return false;
-    }
+	    if(itemName == null && entpName == null || itemName == "" && entpName == ""){
+	    	alert("제품명 또는 회사명을 입력해주세요.")
+	    	return false;
+	    }
 
-	var recognizeName = $("#recognizeName").val()
-    if(recognizeName == null || recognizeName == ""){
-    	recognizeName = "";
-    }
+		var recognizeName = $("#recognizeName").val()
+	    if(recognizeName == null || recognizeName == ""){
+	    	recognizeName = "";
+	    }
 
-	var formName = $("input[name=formName]:checked").val();
-	if(formName == null || formName == ""){
-		alert("제형을 선택해주세요.")
-		return false;
-	}
-
-	var durShape = $("input[name=durShape]:checked").val();
-	if(durShape == null || durShape == ""){
-		alert("모양을 선택해주세요.")
-		return false;
-	}
-
-	var durColor = $("input[name=colors]:checked").val();
-	if(durColor == null  || durColor == ""){
-		alert("색상을 선택해주세요.")
-		return false;
-	}
-
-	var durLine = $("input[name=lines]:checked").val();
-	if(durLine == null || durLine == ""){
-		alert("분할선을 선택해주세요.")
-		return false;
-	}
-
-
-    var param = "";
-     param += "dummy=" + Math.random();
-     param += "&itemName=" + itemName;
-     param += "&entpName=" + entpName;
-     param += "&recognizeName=" + recognizeName;
-     param += "&formName=" + formName;
-     param += "&durShape=" + durShape;
-     param += "&durColor=" + durColor;
-     param += "&durLine=" + durLine;
-
-     $.ajax({
-         type: "post",
-         url: "/durSearch.do",
-         dataType: "json",
-         data: param,
-         error: function (request, status, error) {
-            alert("검색결과가 없습니다.");
-         },
-         success: function (data) {
-        	 fn_reset();
-
-           	console.log(data.data[0].ITEM_NAME)
-			console.log(data)
-			console.log(data.data.length)
-			console.log("성공")
-			var output = "";
-			var cnt = 0;
-
-			for(var i=0; data.data.length; i++){
-
-             	var item = data.data[i]
-	             output += 	"<tr style='border-top:2px solid #e9f9e7'>"
-				 output += 	"	<td class='img'>"
-				 output += 	"		<div class='w-100 h-100'>"
-				 output += 	"			<img alt='의약품이미지' style='width:100%;height:100%' src='"+item.ITEM_IMAGE+"'>"
-				 output += 	"		</div>"
-				 output += 	"	</td>"
-
-				 output += 	"<td class='categ'>"
-				 			if(item.PRINT_FRONT == null || item.PRINT_FRONT ==""){
-				 output += 	"		-"
-							}else{
-				 output += 			item.PRINT_FRONT
-						   }
-				 output += '/'
-					 		if(item.PRINT_BACK == null || item.PRINT_BACK ==""){
-				 output += 	"		-"
-							}else{
-				 output += 			item.PRINT_BACK
-						   }
-				 output += 	"		</td>"
-
-
-				 output += 	"<td class='txtL name'>"+item.ITEM_NAME+"</td>"
-
-				 output += 	"<td class='mark_medi'>"+item.DRUG_SHAPE+"</td>"
-
-				 output += 	"<td class='categ'>"+item.FORM_CODE_NAME+"</td>"
-				 output += "<td class='mark_medi'>"+item.LENG_LONG+"</td>"
-				 output += "<td class='mark_medi'>"+item.LENG_SHORT+"</td>"
-				 output += "<td class='mark_medi'>"+item.THICK+"</td>"
-				 output += "<td class='comp'>"+item.ENTP_NAME+"</td>"
-				 output += 	"</tr>"
-				 output +=  "<tr class='spacer' style='border-top:2px solid #e9f9e7'><td colspan='80' style='padding:0.50rem;'></td></tr>"
-
-
-				 if(formName == "전체" && durShape == "전체" && durColor == "전체"
-					|| formName == "전체" && 	item.DRUG_SHAPE == durShape && item.COLOR_CLASS1.includes(durColor)
-					|| formName == "전체" && 	durShape == "전체" && item.COLOR_CLASS1.includes(durColor)
-					|| item.FORM_CODE_NAME.includes(formName) && durShape == "전체" && item.COLOR_CLASS1.includes(durColor)
-					|| item.FORM_CODE_NAME.includes(formName) && durShape == "전체" && durColor == "전체"
-					|| formName == "전체" && 	item.DRUG_SHAPE == durShape && durColor == "전체"
-					|| item.FORM_CODE_NAME.includes(formName) && item.DRUG_SHAPE == durShape && durColor == "전체"
-					|| item.FORM_CODE_NAME.includes(formName) && item.DRUG_SHAPE == durShape && item.COLOR_CLASS1.includes(durColor)
-				 	){
-					 $("#resList").css("display","block")
-					 $("#resTable").html(output);
-					 cnt = 1;
-				 }else{
-					 cnt = 0;
-				 }
-			}
-            alert(cnt)
-            if(cnt == 0){
-            	alert("조건에 맞는 검색 결과가 없습니다.")
-            }
-		}
-	});
-}
-
-//제형선택
-function pickForm(form){
-	var formName = $(form).find('input[type=checkbox]');
-
-	//전체
-	if(form == "전체"){
-		//이미 선택되어 있을 때
-		if($("#typeAll").is(':checked') == true){
-			$("#typeAll").removeAttr("checked");
-			$("#type_all").css('border',"1px solid #dcdcdc")
-			return false
-
-		}else{
-			//선택되어 있지 않을 때
-			$("#type_all").css('border',"2px solid #2eca6a")
-			$("#typeAll").attr("checked",true);
-			$(".type").css('border',"")
-			$(".formType").removeAttr("checked");
-		}
-
-	//제형 값
-	}else{
-		//이미 선택되어 있을 때
-	 	if(formName.is(':checked') == true){
-	 		$(formName).removeAttr("checked");
-			$(form).css('border', '1px solid #dcdcdc')
+		var formName = $("input[name=formName]:checked").val();
+		if(formName == null || formName == ""){
+			alert("제형을 선택해주세요.")
 			return false;
-	 	}
-
-		if($("input[name=formName]").is(":checked")==true){
-			alert("하나의 제형만 선택할 수 있습니다.")
-			return false
 		}
 
-		$(formName).attr("checked",true);
-		$(form).css('border',"2px solid #2eca6a")
+		var durShape = $("input[name=durShape]:checked").val();
+		if(durShape == null || durShape == ""){
+			alert("모양을 선택해주세요.")
+			return false;
+		}
+
+		var durColor = $("input[name=colors]:checked").val();
+		if(durColor == null  || durColor == ""){
+			alert("색상을 선택해주세요.")
+			return false;
+		}
+
+		var durLine = $("input[name=lines]:checked").val();
+		if(durLine == null || durLine == ""){
+			alert("분할선을 선택해주세요.")
+			return false;
+		}
+
+
+	    var param = "";
+	     param += "dummy=" + Math.random();
+	     param += "&itemName=" + itemName;
+	     param += "&entpName=" + entpName;
+	     param += "&recognizeName=" + recognizeName;
+	     param += "&formName=" + formName;
+	     param += "&durShape=" + durShape;
+	     param += "&durColor=" + durColor;
+	     param += "&durLine=" + durLine;
+	     param += "&msg=drugIdentify";
+
+
+	     $.ajax({
+	         type: "post",
+	         url: "/durSearch.do",
+	         dataType: "json",
+	         data: param,
+	         error: function (request, status, error) {
+	            alert("검색결과가 없습니다.");
+	            fn_reset();
+	         },
+	         success: function (data) {
+
+				console.log(data)
+				console.log("성공")
+				var output = "";
+
+
+				for(var i=0; data.data.length; i++){
+	             	var item = data.data[i]
+
+					output += 	"<tr style='border-top:2px solid #e9f9e7'>"
+					output += 	"	<td class='img' style='width:122px'>"
+					output += 	"		<div class='w-100 h-100'>"
+					output += 	"			<img alt='의약품이미지' style='width:100%;height:100%' src='"+item.itemImage+"'>"
+					output += 	"		</div>"
+					output += 	"	</td>"
+
+					output += 	"<td class='categ' style='width:127px'>"
+								if(item.printFront == null || item.printFront ==""){
+					output += 	"		-"
+								}else{
+					output += 			item.printFront
+						   		}
+					output += 	" / "
+								if(item.printBack == null || item.printBack ==""){
+					output += 	"		-"
+								}else{
+					output += 			item.printBack
+						   		}
+					output += 	"		</td>"
+
+					output += 	"<td class='txtL name' style='width:295px;'>"+item.itemName+"</td>"
+					output += 	"<td class='mark_medi' style='width:122px;'>"+item.drugShape+"</td>"
+					output += 	"<td class='categ' style='width:122px;'>"+item.drugForm+"</td>"
+					output += "<td class='mark_medi' style='width:91px;'>"+item.lengLong+"</td>"
+					output += "<td class='mark_medi' style='width:91px;'>"+item.lengShort+"</td>"
+					output += "<td class='mark_medi' style='width:91px;'>"+item.thick+"</td>"
+					output += "<td class='comp' style='width:125px;'>"+item.entpName+"</td>"
+					output += 	"</tr>"
+					output +=  "<tr class='spacer' style='border-top:2px solid #e9f9e7'><td colspan='80' style='padding:0.50rem;'></td></tr>"
+
+
+						 $("#resList").css("display","block")
+						 $("#resTable").html(output);
+
+
+				 }
+
+			}
+		});
 	}
-}
+
+	//제형선택
+	function pickForm(form){
+		var formName = $(form).find('input[type=checkbox]');
 
 
-//모양선택
-function pickShape(sha){
-	var durShape = $(sha).find('input[type=checkbox]');
+		//전체
+		if(form == "전체"){
+			//이미 선택되어 있을 때
+			if($("#typeAll").is(':checked') == true){
+				$("#typeAll").removeAttr("checked");
+				$("#type_all").css('border',"1px solid #dcdcdc")
+				return false
 
-	//전체
-	if(sha == "전체"){
-		//이미 선택되어있을 때
-		if($("#shapeAll").is(":checked") == true){
-			$("#shapeAll").removeAttr("checked");
-			$("#shape_all").css('border',"1px solid #dcdcdc")
-			return false
+			}else{
+				//선택되어 있지 않을 때
+				$("#type_all").css('border',"2px solid #2eca6a")
+				$("#typeAll").attr("checked",true);
+				$(".type").css('border',"")
+				$(".formType").removeAttr("checked");
+			}
+
+		//제형 값
 		}else{
-			//선택되어 있지 않을 때
-			$("#shape_all").css('border',"2px solid #2eca6a")
-			$("#shapeAll").attr("checked",true);
-			$(".shape").css('border',"");
-			$(".shapeType").removeAttr("checked");
-		}
 
-	//모양 값
-	}else{
-		//이미 선택되어 있을 때
-		if(durShape.is(":checked") == true){
-			$(durShape).removeAttr("checked");
-			$(sha).css('border', '1px solid #dcdcdc')
-			return false
-		}
+			//이미 선택되어 있을 때
+		 	if(formName.is(':checked') == true){
+		 		$(formName).removeAttr("checked");
+				$(form).css('border', '1px solid #dcdcdc');
+				return false;
 
-		if($("input[name=durShape]").is(":checked")==true){
-			alert("하나의 모양만 선택할 수 있습니다.")
-			return false
+		 	}else{
+		 		$("input[name=formName]:checked").removeAttr("checked");
+		 		$("#typeids > li").css('border', '1px solid #dcdcdc');
+				$(formName).attr("checked",true);
+				$(form).css('border',"2px solid #2eca6a")
+
+		 	}
+
 		}
-		$(durShape).attr("checked",true);
-		$(sha).css('border',"2px solid #2eca6a")
 	}
-}
 
 
-//색상선택
-function pickColor(col){
-	var durColor = $(col).find('input[type=checkbox]');
+	//모양선택
+	function pickShape(sha){
+		var durShape = $(sha).find('input[type=checkbox]');
 
-	if(col == "전체"){
+		//전체
+		if(sha == "전체"){
+			//이미 선택되어있을 때
+			if($("#shapeAll").is(":checked") == true){
+				$("#shapeAll").removeAttr("checked");
+				$("#shape_all").css('border',"1px solid #dcdcdc")
+				return false
+			}else{
+				//선택되어 있지 않을 때
+				$("#shape_all").css('border',"2px solid #2eca6a")
+				$("#shapeAll").attr("checked",true);
+				$(".shape").css('border',"");
+				$(".shapeType").removeAttr("checked");
+			}
 
-		if($("#colorAll").is(":checked") == true){
-			$("#colorAll").removeAttr("checked");
-			$("#color_all").css('border',"1px solid #dcdcdc")
-			return false
+		//모양 값
+		}else{
+			//이미 선택되어 있을 때
+			if(durShape.is(":checked") == true){
+				$(durShape).removeAttr("checked");
+				$(sha).css('border', '1px solid #dcdcdc')
+				return false
+
+			}else{
+				$("input[name=durShape]:checked").removeAttr("checked");
+				$("#shapeids > li").css('border', '1px solid #dcdcdc');
+				$(durShape).attr("checked",true);
+				$(sha).css('border',"2px solid #2eca6a");
+			}
+
+
+		}
+	}
+
+
+	//색상선택
+	function pickColor(col){
+		var durColor = $(col).find('input[type=checkbox]');
+
+		if(col == "전체"){
+
+			if($("#colorAll").is(":checked") == true){
+				$("#colorAll").removeAttr("checked");
+				$("#color_all").css('border',"1px solid #dcdcdc")
+				return false
+
+			}else{
+				$("#color_all").css('border',"2px solid #2eca6a")
+				$("#colorAll").attr("checked",true);
+				$(".color").css("border","")
+				$(".colorType").removeAttr("checked");
+			}
 
 		}else{
-			$("#color_all").css('border',"2px solid #2eca6a")
-			$("#colorAll").attr("checked",true);
-			$(".color").css("border","")
-			$(".colorType").removeAttr("checked");
+
+			if(durColor.is(":checked") == true){
+				$(durColor).removeAttr("checked");
+				$(col).css('border', '1px solid #dcdcdc')
+				return false
+			}else{
+
+				$("input[name=colors]:checked").removeAttr("checked");
+				$("#colorids > li").css('border', '1px solid #dcdcdc');
+				$(durColor).attr("checked",true);
+				$(col).css("border", "2px solid #2eca6a")
+			}
 		}
 
-	}else{
-
-		if(durColor.is(":checked") == true){
-			$(durColor).removeAttr("checked");
-			$(col).css('border', '1px solid #dcdcdc')
-			return false
-		}
-
-		if($("input[name=colors]").is(":checked")==true){
-			alert("하나의 색상만 선택할 수 있습니다.")
-			return false
-		}
-		$(durColor).attr("checked",true);
-		$(col).css("border", "2px solid #2eca6a")
 	}
 
-}
 
 
 
+	function pickLine(line){
+		var durLine = $(line).find('input[type=checkbox]');
 
-function pickLine(line){
-	var durLine = $(line).find('input[type=checkbox]');
+		if(line == "전체"){
 
-	if(line == "전체"){
+			if($("#lineAll").is(":checked") == true){
+				$("#lineAll").removeAttr("checked");
+				$("#line_all").css("border", "1px solid #dcdcdc")
+				return false
+			}else{
+				$("#line_all").css('border',"2px solid #2eca6a")
+				$("#lineAll").attr("checked",true);
+				$(".line").css("border","")
+				$(".lineType").removeAttr("checked");
+			}
 
-		if($("#lineAll").is(":checked") == true){
-			$("#lineAll").removeAttr("checked");
-			$("#line_all").css("border", "1px solid #dcdcdc")
-			return false
 		}else{
-			$("#line_all").css('border',"2px solid #2eca6a")
-			$("#lineAll").attr("checked",true);
-			$(".line").css("border","")
-			$(".lineType").removeAttr("checked");
-		}
 
-	}else{
+			if(durLine.is(":checked") == true){
+				$(durLine).removeAttr("checked");
+				$(line).css("border", "1px solid #dcdcdc")
+				return false
+			}else{
 
-		if(durLine.is(":checked") == true){
-			$(durLine).removeAttr("checked");
-			$(line).css("border", "1px solid #dcdcdc")
-			return false
+				$("input[name=lines]:checked").removeAttr("checked");
+				$("#lineids > li").css('border', '1px solid #dcdcdc');
+				$(durLine).attr("checked",true);
+				$(line).css("border", "2px solid #2eca6a")
+			}
 		}
-
-		if($("input[name=lines]").is(":checked")==true){
-			alert("하나의 분할선만 선택할 수 있습니다.")
-			return false
-		}
-		$(durLine).attr("checked",true);
-		$(line).css("border", "2px solid #2eca6a")
 	}
-}
 
 
 	function fn_reset(){
@@ -694,10 +657,8 @@ function pickLine(line){
 						<th style="width: 100px;">두께</th>
 					</tr>
 				</thead>
-				<tbody id="resTable">
+				<tbody id="resTable"></tbody>
 
-
-					</tbody>
 				</table>
 
 

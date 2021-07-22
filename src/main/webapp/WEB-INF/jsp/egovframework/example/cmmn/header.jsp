@@ -72,19 +72,20 @@
 					<h4>추천 검색어</h4>
 				</div>
 			</div>
+			<br/>
 			<div class="row">
 				<div class="col">
-					<button class="predict-btn">이지엔</button>
-					<button class="predict-btn" style="width: 30%;">타이레놀</button>
-					<button class="predict-btn" style="width: 30%;">아스피린</button>
+					<i class="recommand">#이지엔</i>
+					&nbsp;&nbsp;
+					<i class="recommand">#타이레놀</i>
+					&nbsp;&nbsp;
+					<i class="recommand">#아스피린</i>
+
 				</div>
 			</div>
-
 		</div>
 	</c:if>
-
 </div>
-
 
 
 

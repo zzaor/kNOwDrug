@@ -75,4 +75,125 @@
 		]]>
     </insert>
 
+    <update id="mergeData" parameterType="hashMap">
+         <![CDATA[
+			 MERGE 	INTO SEARCH_DATA
+			 USING  DUAL
+			    ON 	(ITEM_NAME = #{ITEM_NAME})
+			  WHEN 	MATCHED THEN
+		    UPDATE 	SET UP_USER_ID = #{memId} , UP_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+			  WHEN 	NOT MATCHED THEN
+		    INSERT (
+	    				ITEM_NAME,
+						ITEM_IMAGE,
+						PRINT_FRONT,
+						ENTP_NAME,
+						DRUG_SHAPE,
+						DRUG_FORM,
+						LENG_LONG,
+						LENG_SHORT,
+						THICK,
+						PRINT_BACK,
+						ITEM_COLOR,
+						ITEM_SEQ,
+						CHART,
+						ETC_NAME,
+						ITEM_ENG_NAME,
+						IN_USER_ID,
+						IN_DATE,
+						UP_USER_ID,
+						UP_DATE
+	    			)
+		     VALUES (
+	    				#{ITEM_NAME},
+						#{ITEM_IMAGE},
+						#{PRINT_FRONT},
+						#{ENTP_NAME},
+						#{DRUG_SHAPE},
+						#{FORM_CODE_NAME},
+						#{LENG_LONG},
+						#{LENG_SHORT},
+						#{THICK},
+						#{PRINT_BACK},
+						#{COLOR_CLASS1},
+						#{ITEM_SEQ},
+						#{CHART},
+						#{ETC_OTC_NAME},
+						#{ITEM_ENG_NAME},
+	    				#{memId},
+	    				TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+	    				#{memId},
+	    				TO_CHAR(SYSDATE,'YYYY-MM-DD')
+	    			)
+         ]]>
+    </update>
+
+
+	<select id="selectData" resultType="egovMap">
+
+	    SELECT
+    			ITEM_NAME,
+				ITEM_IMAGE,
+				PRINT_FRONT,
+				ENTP_NAME,
+				DRUG_SHAPE,
+				DRUG_FORM,
+				LENG_LONG,
+				LENG_SHORT,
+				THICK,
+				PRINT_BACK,
+				ITEM_COLOR,
+				ITEM_SEQ,
+				CHART,
+				ETC_NAME,
+				ITEM_ENG_NAME
+		FROM
+				SEARCH_DATA
+		WHERE
+				ITEM_NAME LIKE '%' || #{itemName} || '%'
+		<if test="entpName != null and entpName  != ''">
+		  AND   ENTP_NAME LIKE '%' || #{entpName} || '%'
+		</if>
+		<if test="formName != '전체'">
+		  AND  	DRUG_FORM LIKE '%' || #{formName} || '%'
+		</if>
+		<if test="durColor != '전체'">
+		  AND  	ITEM_COLOR LIKE '%' || #{durColor} || '%'
+		</if>
+		<if test="durShape != '전체'">
+		  AND  	DRUG_SHAPE LIKE '%' || #{durShape} || '%'
+		</if>
+
+	</select>
+
+	<select id="selectGraph" resultType="egovMap">
+
+	    SELECT
+	    		S.RNUM, S.ITEM_NAME
+	      FROM
+	    		(
+	    SELECT
+	    		ROWNUM RNUM, T.*
+	      FROM
+	         	(
+			    SELECT
+						DISTINCT TRIM(ITEM_NAME) AS ITEM_NAME
+		  		  FROM
+		  		  		DUR_SEARCH
+		 		 WHERE
+		 		 		ITEM_NAME IS NOT NULL
+		   		   AND
+		   		   		LENGTH(ITEM_NAME) >= 2
+   		   		) T
+   		   	) S
+   		  WHERE S.RNUM BETWEEN TO_NUMBER(#{pageNum})*9-8 AND TO_NUMBER(#{pageNum})*9
+	</select>
+
+	<select id="selectCount" resultType="int">
+	    SELECT
+	    		COUNT (DISTINCT (ITEM_NAME))
+	      FROM
+	       		DUR_SEARCH
+	</select>
+
 </mapper>

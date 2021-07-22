@@ -7,28 +7,10 @@
 %>
 	<c:set var="memId" value="<%=memId%>" />
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
   <!-- Favicons -->
   <!-- Template Main JS File -->
   <script src="/resources/assets/js/main.js"></script>
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=815248eb47a306fe880b3b368e6105a9&libraries=services"></script>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/drug_info.css" rel="stylesheet">

@@ -195,6 +195,7 @@
 			BOARD_REPLY
 		WHERE
 			BOARD_SEQ = #{boardSeq}
+		ORDER  BY REPLY_SEQ
 	</select>
 
 	<delete id="replyDel" parameterType="hashMap">

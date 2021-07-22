@@ -4,28 +4,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/join.css" rel="stylesheet">
 <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
@@ -92,9 +70,42 @@
 	            }
 
 	        });
+
+		    var autoHypenPhone = function(str){
+		        str = str.replace(/[^0-9]/g, '');
+		        var tmp = '';
+		        if( str.length < 4){
+		            return str;
+		        }else if(str.length < 7){
+		            tmp += str.substr(0, 3);
+		            tmp += '-';
+		            tmp += str.substr(3);
+		            return tmp;
+		        }else if(str.length < 11){
+		            tmp += str.substr(0, 3);
+		            tmp += '-';
+		            tmp += str.substr(3, 3);
+		            tmp += '-';
+		            tmp += str.substr(6);
+		            return tmp;
+		        }else{
+		            tmp += str.substr(0, 3);
+		            tmp += '-';
+		            tmp += str.substr(3, 4);
+		            tmp += '-';
+		            tmp += str.substr(7);
+		            return tmp;
+		        }
+		        return str;
+		  	}
+
+
+		  	var memTel = document.getElementById('memTel');
+
+		  	memTel.onkeyup = function(){
+		    	this.value = autoHypenPhone( this.value ) ;
+		  	}
 	    });
-
-
     </script>
 </head>
 <body class="sebang">
@@ -136,7 +147,7 @@
 		                                <div class="col">
 		                                    <input type="email" class="search-input w-100" name="memId" id="memId" placeholder="아이디 (이메일 )" required>
 
-		                                    <button type="button" class="search-btn" style="width: 27%; position:absolute; right: 8px; top: -13px; height: 47px;"onclick="idDuplCheck()">
+		                                    <button type="button" class="search-btn" style="width: 27%; position:absolute; right: 5px; top: -13px; height: 47px;"onclick="idDuplCheck()">
 		                                    	아이디 중복 확인
 		                                    </button>
 		                                </div>
@@ -159,7 +170,7 @@
 		                                </div>
 
 		                                <div class="col-sm-6 mb-3 mb-sm-0">
-		                                    <input type="tel" class="search-input" name="memTel" placeholder="연락처  ex)000-1234-5678" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required>
+		                                    <input type="tel" class="search-input" name="memTel" id="memTel" placeholder="연락처" maxlength="13" required>
 		                                    <span class="badge badge-pill"></span>
 		                                </div>
 		                            </div>

@@ -14,14 +14,9 @@
   <link href="/resources/assets/css/academic_info.css" rel="stylesheet">
 
 <script type="text/javascript">
-	function fn_chk(){
-		var varSelOpt = document.getElementById("selOpt").value;
-		var varKeyword = document.getElementById("keyword").value;
 
-		if(varKeyword == null || varKeyword == ""){
-			alert("검색어를 입력하세요.")
-		}
-
+	function searchDetail(){
+		window.open("/graphDetail.do", "PopupWin", "width=990,height=610")
 	}
 
 </script>
@@ -35,15 +30,10 @@
         <div class="row">
           <div class="col-md-12 col-lg-8">
             <div class="title-single-box">
-              <h1 class="title-single">학술정보</h1>
-              <span class="color-text-a">Academic Infomation</span>
+              <h1 class="title-single">검색어 그래프</h1>
+              <span class="color-text-a">Search Word Graph</span>
             </div>
           </div>
-          <c:if test="${memId eq 'admin'}">
-          <div class="col-md-12 col-lg-4">
-            <input type="button" value="글쓰기" class="write-btn" onclick="location.href='/academic_info_write.do'" />
-          </div>
-          </c:if>
         </div>
       </div>
     </section><!-- End Intro Single-->
@@ -52,44 +42,24 @@
     <section class="property-grid grid">
       <div class="container">
         <div class="row">
-          <div class="col-sm-12">
-            <div class="grid-option search">
-              <form method="get" onsubmit="return fn_chk()">
-                <select class="custom-select" name="selOpt" id="selOpt">
-                  <option value="" selected>전체</option>
-                  <option value="title"
-                  	<c:if test="${selOpt == 'title'}">selected</c:if>>
-                  	제목
-                  	</option>
-                  <option value="inDate"
-                  	<c:if test="${selOpt =='inDate'}">selected</c:if>>
-                  	작성일
-                  </option>
-                </select>
-                <input type="text" class="search-input" placeholder='검색어를 입력하세요.' id="keyword" name="keyword" />
-                <input type="submit" class="search-btn" value="검색"  value="Search"/>
-              </form>
-            </div>
-          </div>
 
-
-          <c:forEach var="list" items="${academicList.content}">
+          <c:forEach var="list" items="${dataList.content}">
           <div class="col-md-4">
             <div class="card-box-a card-shadow">
-              <div class="img-box-a">
-                <img src="/resources/assets/img/icon/academic_cover.jpg" alt="" class="img-a img-fluid">
+              <div class="img-box-a" style="height: 350px;">
+                <img src="/resources/assets/img/icon/graph_cover.jpg" alt="" class="img-a img-fluid">
               </div>
               <div class="card-overlay">
                 <div class="card-overlay-a-content">
                   <div class="card-header-a">
                     <h2 class="card-title-a">
-                      ${list.academicTitle}
+                      	${list.itemName}
                     </h2>
                   </div>
                   <br/>
                   <div class="card-body-a">
                     <div class="price-box d-flex">
-                      <a href="/academic_info_detail.do?academicSeq=${list.academicSeq}"><span class="price-a">보러가기</span></a>
+                      <a href="#" onclick="searchDetail()"><span class="price-a">보러가기</span></a>
                     </div>
                   </div>
                   <div class="card-footer-a">
@@ -100,11 +70,11 @@
                       </li>
                       <li>
                         <h4 class="card-info-title">조회수</h4>
-                        <span>${list.academicHit}</span>
+                        <span>234</span>
                       </li>
                       <li>
                         <h4 class="card-info-title">게시일</h4>
-                        <span>${list.inDate}</span>
+                        <span>32423</span>
                       </li>
                     </ul>
                   </div>
@@ -116,35 +86,35 @@
         </div>
 
 		<br/>
-		<c:if test="${academicList.hasArticles()}">
+
 	        <div class="row">
 	          <div class="col-sm-12">
 	            <nav class="pagination-a">
 	              <ul class="pagination justify-content-end">
-	              <c:if test="${academicList.startPage > 5 }">
-	                <li class="page-item disabled">
-	                  <a class="page-link" href="/academic_info.do?pageNum=${academic_info.startPage - 5}" tabindex="-1">
+	              <c:if test="${dataList.startPage > 5 }">
+	                <li class="page-item">
+	                  <a class="page-link" href="/graph.do?pageNum=${dataList.startPage - 5}" tabindex="-1">
 	                    <span class="ion-ios-arrow-back"></span>
 	                  </a>
 	                </li>
 	                </c:if>
 
-					<c:forEach var="pNo" begin="${academicList.startPage}" end="${academicList.endPage}" >
-						<c:if test="${academicList.currentPage eq pNo}">
+					<c:forEach var="pNo" begin="${dataList.startPage}" end="${dataList.endPage}" >
+						<c:if test="${dataList.currentPage eq pNo}">
 							<li class="page-item active">
-								<a href="/academic_info.do?pageNum=${pNo}" class="page-link">${pNo}</a>
+								<a href="/graph.do?pageNum=${pNo}" class="page-link">${pNo}</a>
 							</li>
 						</c:if>
-						<c:if test="${academicList.currentPage ne pNo}">
+						<c:if test="${dataList.currentPage ne pNo}">
 							<li class="page-item">
-								<a href="/academic_info.do?pageNum=${pNo}" class="page-link">${pNo}</a>
+								<a href="/graph.do?pageNum=${pNo}" class="page-link">${pNo}</a>
 							</li>
 						</c:if>
 					</c:forEach>
 
-					<c:if test="${academicList.endPage <  academicList.totalPages}">
+					<c:if test="${dataList.endPage <  dataList.totalPages}">
 		                <li class="page-item next">
-		                  <a class="page-link" href="/academic_info.do?pageNum=${academic_info.startPage + 5 }">
+		                  <a class="page-link" href="/graph.do?pageNum=${dataList.startPage + 5 }">
 		                    <span class="ion-ios-arrow-forward"></span>
 		                  </a>
 		                </li>
@@ -154,7 +124,7 @@
 	            </nav>
 	          </div>
 	        </div>
-        </c:if>
+
       </div>
     </section><!-- End Property Grid Single-->
 

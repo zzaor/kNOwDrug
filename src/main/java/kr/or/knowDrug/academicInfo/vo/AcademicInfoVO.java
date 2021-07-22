@@ -31,8 +31,6 @@ public class AcademicInfoVO {
 		this.upUserId = upUserId;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "AcademicInfoVO [academicSeq=" + academicSeq + ", memId=" + memId + ", academicTitle=" + academicTitle

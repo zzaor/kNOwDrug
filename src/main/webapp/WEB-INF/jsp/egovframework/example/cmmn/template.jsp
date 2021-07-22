@@ -5,6 +5,10 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="" name="description">
+<meta content="" name="keywords">
+
 
 <!-- CSS here -->
   <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">

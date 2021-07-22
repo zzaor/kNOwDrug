@@ -3,27 +3,6 @@
 <%@ taglib prefix ="c" uri ="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/mypage.css" rel="stylesheet">
 
@@ -106,7 +85,7 @@ function fn_sendmail(){
 			                        	<label style="margin-top: 10px;">이메일</label>
 			                        </div>
 			                        <div class="col-sm-8" >
-		                            	<input type="text" class="search-input" id="memId" name="memId" placeholder="abc123@knowdrug.co.kr" required>
+		                            	<input type="text" class="search-input" id="memId" name="memId" placeholder="piano10219@nate.com" required>
 		                        	</div>
 		                        </div>
 								<div class="form-group row" style="margin-top: 7%;">

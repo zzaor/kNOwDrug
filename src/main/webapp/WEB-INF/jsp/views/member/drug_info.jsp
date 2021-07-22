@@ -11,33 +11,9 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.js"></script>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/drug_info.css" rel="stylesheet">
 <style>
-
-
 body{margin-top:20px;}
 .section-title {
     position: relative;
@@ -358,7 +334,6 @@ ul li {
 						modalput += "			</div>"
 						modalput += "			<div class='modal-footer'>"
 						modalput += "				<button type='button' class='search-btn' data-dismiss='modal'>닫기</button>"
-						modalput += "				<button type='button' class='search-btn' onclick='imgfn("+i+")'>저장</button>"
 						modalput += "			</div>"
 						modalput += "		</div>"
 						modalput += "	</div>"
@@ -383,7 +358,7 @@ ul li {
       }
       html2canvas(document.querySelector("#capture")).then(canvas => {
           saveAs(canvas.toDataURL(), 'fileName.jpg');
-          
+
       });
 	}
 

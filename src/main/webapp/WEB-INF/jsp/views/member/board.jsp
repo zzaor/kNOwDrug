@@ -8,49 +8,27 @@
 %>
 	<c:set var="memId" value="<%=memId%>" />
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/board.css?after" rel="stylesheet">
 <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript">
-function fn_chk(){
-	var varSelOpt = document.getElementById("selOpt").value;
-	var varKeyword = document.getElementById("keyword").value;
+	function fn_chk(){
+		var varSelOpt = document.getElementById("selOpt").value;
+		var varKeyword = document.getElementById("keyword").value;
 
-	if(varKeyword == null || varKeyword == ""){
-		alert("검색어를 입력하세요.")
+		if(varKeyword == null || varKeyword == ""){
+			alert("검색어를 입력하세요.")
+		}
 	}
 
-}
-
-$(function () {
-	$('[data-toggle="popover-click"]').popover({
-      html: true,
-      trigger: 'click',
-      placement: 'bottom',
-      content: function () { return  $(this).data('img'); }
-    });
-})
+	$(function () {
+		$('[data-toggle="popover-click"]').popover({
+	      html: true,
+	      trigger: 'click',
+	      placement: 'bottom',
+	      content: function () { return  $(this).data('img'); }
+	    });
+	})
 </script>
 <style>
 .popover-body img{
@@ -122,6 +100,7 @@ $(function () {
 				      <c:if test="${list.attachFile != null}">
 				     <a href="#" data-toggle="popover-click" data-img="<img src='resources/assets/img/upload/board/${list.attachFile}'/>">
 						<img src="/resources/assets/img/icon/file_icon.png" style="width: 25px;"/>
+					 </a>
 				      </c:if>
 				      <c:if test="${list.attachFile == null}">
 				      -

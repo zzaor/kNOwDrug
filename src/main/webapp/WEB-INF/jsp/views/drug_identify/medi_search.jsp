@@ -7,27 +7,6 @@
 %>
 	<c:set var="memId" value="<%=memId%>" />
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>EstateAgency Bootstrap Template - Index</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-
-  <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/medi_search.css" rel="stylesheet">
 
@@ -68,6 +47,7 @@
 	     param += "&efficacy=" + efficacy;
 	     param += "&route=" + route;
 	     param += "&formName=" + formName;
+	     param += "&msg=mediSearch";
 
 
 	     $.ajax({
@@ -77,97 +57,122 @@
 	         data: param,
 	         error: function (request, status, error) {
 	            alert("검색결과가 없습니다.");
+	            location.reload()
 	         },
 	         success: function (data) {
-	        	fn_reset()
-
 	        	$("#resList").css("display","block")
 
-
-	           	console.log(data.data[0].ITEM_NAME)
 				console.log(data)
-				console.log(data.data.length)
+
 				console.log("성공")
 
 				var output = "";
 
 	        	var modalput = "";
+
 	            for(var i=0; data.data.length; i++){
 	             var item = data.data[i]
+	             console.log(item.itemEngName)
+	             console.log(typeof item.itemEngName != "undefined")
+
 	             	 output += 	"<tr style='border-top:2px solid #e9f9e7'>"
-					 output += 	"<td><a href='#' data-toggle='modal' data-target='#drugDetail_"+i+"'><img class='img' id='itemImg' src='"+item.ITEM_IMAGE+"' onclick='' style='width:120px; height:70px;'>"+"</a></td>"
-					 output += 	"<td>"+item.FORM_CODE_NAME+"</td>"
-					 output += 	"<td>"+item.LENG_LONG+"</td>"
-					 output += 	"<td>"+item.LENG_SHORT+"</td>"
-					 output += 	"<td>"+item.THICK+"</td>"
-					 output += 	"<td>"+item.ITEM_NAME+item.ITEM_ENG_NAME+"</td>"
-					 output += 	"<td>"+item.ENTP_NAME+"</td>"
+					 output += 	"<td style='width:148px'><a href='#' data-toggle='modal' data-target='#drugDetail_"+i+"'><img class='img' id='itemImg' src='"+item.itemImage+"' onclick='' style='width:120px; height:70px;'>"+"</a></td>"
+					 output += 	"<td style='width:122px'>"+item.drugForm+"</td>"
+
+					 output +=  "<td style='width:127px'>"
+								if(item.lengLong != null || item.lengLong != ""){
+					 output += 		item.lengLong
+							 	}
+							 	if(item.lengLong == null || item.lengLong == ""){
+					 output += "	<p>-</p>"
+							 	}
+					 output += "</td>"
+					 output +=  "<td style='width:127px'>"
+								if(item.lengShort != null || item.lengShort != ""){
+					 output += 		item.lengShort
+							 	}
+							 	if(item.lengShort == null || item.lengShort == ""){
+					 output += "	<p>-</p>"
+							 	}
+					 output += "</td>"
+					 output +=  "<td style='width:127px'>"
+								if(item.thick != null || item.thick != ""){
+					 output += 		item.thick
+							 	}
+							 	if(item.thick == null || item.thick == ""){
+					 output += "	<p>-</p>"
+							 	}
+					 output += "</td>"
+
+					 output += 	"<td style='width:331px'>"+item.itemName+"</td>"
+					 output += 	"<td style='width:124px'>"+item.entpName+"</td>"
 					 output += 	"</tr>"
 					 output +=  "<tr class='spacer' style='border-top:2px solid #e9f9e7'><td colspan='80' style='padding:0.50rem;'></td></tr>"
 
 	                 $("#resTable").html(output);
 
-				 modalput += "<div class='modal fade bd-example-modal-lg' id='drugDetail_"+i+"' tabindex='-1' role='dialog' aria-labelledby='' aria-hidden='true'>"
-				 modalput += "	<div class='modal-dialog modal-lg' role='document'>"
-				 modalput += "		<div class='modal-content txt-ct'>"
-				 modalput += "			<div class='modal-header'>"
-				 modalput += "				<h5 class='modal-title'>제품 상세정보</h5>"
-				 modalput += "				<button type='button' class='close' data-dismiss='modal' aria-label='Close'>"
-				 modalput += "					<span aria-hidden='true'>&times;</span>"
-				 modalput += "				</button>"
-				 modalput += "			</div>"
-				 modalput += "			<div class='modal-body'>"
-				 modalput += "				<div class='container txt-cnt'>"
-	      		 modalput += "					<div class='row justify-content-between'>"
-				 modalput += "						<div class='col-7'><img class='img' src='"+item.ITEM_IMAGE+"' style='width:420px'></div>"
+					 modalput += "<div class='modal fade bd-example-modal-lg' id='drugDetail_"+i+"' tabindex='-1' role='dialog' aria-labelledby='' aria-hidden='true'>"
+					 modalput += "	<div class='modal-dialog modal-lg' role='document'>"
+					 modalput += "		<div class='modal-content txt-ct'>"
+					 modalput += "			<div class='modal-header'>"
+					 modalput += "				<h5 class='modal-title'>제품 상세정보</h5>"
+					 modalput += "				<button type='button' class='close' data-dismiss='modal' aria-label='Close'>"
+					 modalput += "					<span aria-hidden='true'>&times;</span>"
+					 modalput += "				</button>"
+					 modalput += "			</div>"
+					 modalput += "			<div class='modal-body'>"
+					 modalput += "				<div class='container txt-cnt'>"
+		      		 modalput += "					<div class='row justify-content-between'>"
+					 modalput += "						<div class='col-7'><img class='img' src='"+item.itemImage+"' style='width:420px'></div>"
 					 modalput += "						<div class='col'>"
-				 modalput += "							<div class='row'>"
+				 	 modalput += "							<div class='row'>"
 					 modalput += "								<div class='col mtitle h-35'><p class='col-mg'>품목일련번호</p></div>"
-				 modalput += "								<div class='w-100'></div>"
-				 modalput += "								<div class='col  h-35'><p class='col-mg'>"+item.ITEM_SEQ+"</p></div>"
-				 modalput += "								<div class='w-100'></div>"
-				 modalput += "								<div class='col mtitle  h-35'><p class='col-mg'>품목명</p></div>"
-				 modalput += "								<div class='w-100'></div>"
-				 modalput += "								<div class='col'><p class='col-mg'><b>"+item.ITEM_NAME+"</b></p></div>"
-				 modalput += "								<div class='w-100'></div>"
-				 modalput += "								<div class='col mtitle h-35'><p class='col-mg'>성분/함량</p></div>"
-				 modalput += "								<div class='w-100'></div>"
-				 modalput += "								<div class='col h-35'>"
-				 										if(item.ITEM_ENG_NAME != null || item.ITEM_ENG_NAME != ""){
-				 modalput += 									item.ITEM_ENG_NAME
-				 										}
+					 modalput += "								<div class='w-100'></div>"
+					 modalput += "								<div class='col  h-35'><p class='col-mg'>"+item.itemSeq+"</p></div>"
+					 modalput += "								<div class='w-100'></div>"
+					 modalput += "								<div class='col mtitle  h-35'><p class='col-mg'>품목명</p></div>"
+					 modalput += "								<div class='w-100'></div>"
+					 modalput += "								<div class='col'><p class='col-mg'><b>"+item.itemName+"</b></p></div>"
+					 modalput += "								<div class='w-100'></div>"
+					 modalput += "								<div class='col mtitle h-35'><p class='col-mg'>성분/함량</p></div>"
+					 modalput += "								<div class='w-100'></div>"
+					 modalput += "								<div class='col h-35'>"
 
-				 										if(item.ITEM_ENG_NAME == null || item.ITEM_ENG_NAME == ""){
-				 modalput += "									<p>-</p>"
-				 										}
-				 modalput += "								</div>"
-				 modalput += "							</div>"
-				 modalput += "						</div>"
-  				 modalput += "					</div>"
-				 modalput += "					<div class='row'>"
-				 modalput += "						<div class='col mtitle col-mg h-35'><p class='col-mg'>제조/수입사</p></div>"
-				 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.ENTP_NAME+"</p></div>"
-				 modalput += "						<div class='col mtitle col-mg'><p class='col-mg'>전문/일반</p></div>"
-				 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.ETC_OTC_NAME+"</p></div>"
-				 modalput += "					</div>"
-				 modalput += "					<div class='row'>"
-				 modalput += "						<div class='col mtitle col-mg h-35'><p class='col-mg'>색상</p></div>"
-				 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.COLOR_CLASS1+"</p></div>"
-				 modalput += "						<div class='col mtitle col-mg'><p class='col-mg'>의약품모양</p></div>"
-				 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.DRUG_SHAPE+"</p></div>"
-				 modalput += "					</div>"
-				 modalput += "					<div class='row'>"
-				 modalput += "						<div class='col-3 mtitle col-mg h-35'><p class='col-mg'>성상</p></div>"
-				 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.CHART+"</p></div>"
-				 modalput += "					</div>"
-				 modalput += "				</div>"
-				 modalput += "			</div>"
-				 modalput += "			<div class='modal-footer'>"
-				 modalput += "				<button class='search-btn' data-dismiss='modal'>닫기</button>"
-				 modalput += "			</div>"
-				 modalput += "		</div>"
-				 modalput += "	</div>"
-				 modalput += "</div>"
+
+					 										if(typeof item.itemEngName != "undefined"){
+					 modalput += 									item.itemEngName
+					 										}
+					 										if(typeof item.itemEngName === "undefined" ){
+					 modalput += "									<p>-</p> "
+					 										}
+					 modalput += "								</div>"
+					 modalput += "							</div>"
+					 modalput += "						</div>"
+	  				 modalput += "					</div>"
+					 modalput += "					<div class='row'>"
+					 modalput += "						<div class='col mtitle col-mg h-35'><p class='col-mg'>제조/수입사</p></div>"
+					 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.entpName+"</p></div>"
+					 modalput += "						<div class='col mtitle col-mg'><p class='col-mg'>전문/일반</p></div>"
+					 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.etcName+"</p></div>"
+					 modalput += "					</div>"
+					 modalput += "					<div class='row'>"
+					 modalput += "						<div class='col mtitle col-mg h-35'><p class='col-mg'>색상</p></div>"
+					 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.itemColor+"</p></div>"
+					 modalput += "						<div class='col mtitle col-mg'><p class='col-mg'>의약품모양</p></div>"
+					 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.drugShape+"</p></div>"
+					 modalput += "					</div>"
+					 modalput += "					<div class='row'>"
+					 modalput += "						<div class='col-3 mtitle col-mg h-35'><p class='col-mg'>성상</p></div>"
+					 modalput += "						<div class='col col-mg'><p class='col-mg'>"+item.chart+"</p></div>"
+					 modalput += "					</div>"
+					 modalput += "				</div>"
+					 modalput += "			</div>"
+					 modalput += "			<div class='modal-footer'>"
+					 modalput += "				<button class='search-btn' data-dismiss='modal'>닫기</button>"
+					 modalput += "			</div>"
+					 modalput += "		</div>"
+					 modalput += "	</div>"
+					 modalput += "</div>"
 
                  $("#resModal").html(modalput);
 	             }
@@ -186,8 +191,22 @@
     	$("#route").val("전체").prop("selected", true);
     	$("#formName").val("전체").prop("selected", true);
 	}
+
 </script>
+<style>
+	.alphabet:hover{
+		outline:1px solid green;
+		background: #fff;
+		border: rgba(46,202,106,0.8);
+		box-shadow: 0 1px 1px rgba(46,202,106,0.075) inset, 0 0 8px rgba(46,202,106,0.6);
+		cursor:pointer;
+
+	}
+
+</style>
+
 </head>
+
 <body class="sebang">
 
 
@@ -226,82 +245,82 @@
         	<div class="col letters">
         		<p>* 정확한 제품명을 모를 경우 알파벳으로 검색할 수 있습니다.</p>
         		<ul id="ul_initial" >
-					<li id="A" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="A" class="alphabet" onclick="fn_click(this.id)">
 						<a>A</a>
 					</li>
-					<li id="B" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="B" class="alphabet" onclick="fn_click(this.id)">
 						<a>B</a>
 					</li>
-					<li id="C" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="C" class="alphabet" onclick="fn_click(this.id)">
 						<a>C</a>
 					</li>
-					<li id="D" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="D" class="alphabet" onclick="fn_click(this.id)">
 						<a >D</a>
 					</li>
-					<li id="E" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="E" class="alphabet" onclick="fn_click(this.id)">
 						<a>E</a>
 					</li>
-					<li id="F" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="F" class="alphabet" onclick="fn_click(this.id)">
 						<a>F</a>
 					</li>
-					<li id="G" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="G" class="alphabet" onclick="fn_click(this.id)">
 						<a>G</a>
 					</li>
-					<li id="H" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="H" class="alphabet" onclick="fn_click(this.id)">
 						<a>H</a>
 					</li>
-					<li id="I" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="I" class="alphabet" onclick="fn_click(this.id)">
 						<a>I</a>
 					</li>
-					<li id="J" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="J" class="alphabet" onclick="fn_click(this.id)">
 						<a>J</a>
 					</li>
-					<li id="K" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="K" class="alphabet" onclick="fn_click(this.id)">
 						<a>K</a>
 					</li>
-					<li id="L" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="L" class="alphabet" onclick="fn_click(this.id)">
 						<a>L</a>
 					</li>
-					<li id="M" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="M" class="alphabet" onclick="fn_click(this.id)">
 						<a>M</a>
 					</li>
-					<li id="N" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="N" class="alphabet" onclick="fn_click(this.id)">
 						<a>N</a>
 					</li>
-					<li id="O" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="O" class="alphabet" onclick="fn_click(this.id)">
 						<a>O</a>
 					</li>
-					<li id="P" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="P" class="alphabet" onclick="fn_click(this.id)">
 						<a>P</a>
 					</li>
-					<li id="Q" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="Q" class="alphabet" onclick="fn_click(this.id)">
 						<a>Q</a>
 					</li>
-					<li id="R" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="R" class="alphabet" onclick="fn_click(this.id)">
 						<a>R</a>
 					</li>
-					<li id="S" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="S" class="alphabet" onclick="fn_click(this.id)">
 						<a>S</a>
 					</li>
-					<li id="T" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="T" class="alphabet" onclick="fn_click(this.id)">
 						<a>T</a>
 					</li>
-					<li id="U" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="U" class="alphabet" onclick="fn_click(this.id)">
 						<a>U</a>
 					</li>
-					<li id="V"  style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="V" class="alphabet" onclick="fn_click(this.id)">
 						<a>V</a>
 					</li>
-					<li id="W"  style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="W" class="alphabet" onclick="fn_click(this.id)">
 						<a>W</a>
 					</li>
-					<li id="X"  style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="X" class="alphabet" onclick="fn_click(this.id)">
 						<a>X</a>
 					</li>
-					<li id="Y" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="Y" class="alphabet" onclick="fn_click(this.id)">
 						<a>Y</a>
 					</li>
-					<li id="Z" style="cursor:pointer" onclick="fn_click(this.id)">
+					<li id="Z" class="alphabet" onclick="fn_click(this.id)">
 						<a>Z</a>
 					</li>
 				</ul>
@@ -356,7 +375,7 @@
 		<div class="row txt-cnt">
 			<div class="col">
 				<button class="search-btn" onclick="fn_reset()">초기화</button>
-				<button class="search-btn" onclick="fn_Search()">검 색</button>
+				<button id="search" class="search-btn" onclick="fn_Search()">검 색</button>
 			</div>
 		</div>
 
